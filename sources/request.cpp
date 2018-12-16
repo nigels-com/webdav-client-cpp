@@ -120,10 +120,11 @@ namespace WebDAV
 	bool Request::perform() const noexcept
 	{
 		if (this->handle == nullptr) return false;
-		auto is_performed = check_code(curl_easy_perform(this->handle));
-		if (!is_performed) return false;
+		if (!check_code_with_message(curl_easy_perform(this->handle)))
+			return false;
 		long http_code = 0;
-		curl_easy_getinfo(this->handle, CURLINFO_RESPONSE_CODE, &http_code);
+		if (!check_code_with_message(curl_easy_getinfo(this->handle, CURLINFO_RESPONSE_CODE, &http_code)))
+			return false;
 		if (http_code < 200 || http_code > 299) return false;
 		return true;
 	}

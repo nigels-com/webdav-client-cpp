@@ -34,6 +34,17 @@ namespace WebDAV
 		return code == CURLE_OK;
 	}
 
+	bool inline check_code_with_message(CURLcode code)
+	{
+		if (code==CURLE_OK)
+		{
+			return true;
+		}
+
+		printf("Request failed: %s", curl_easy_strerror(code));
+		return false;
+	}
+
 	using dict_t = std::map<std::string, std::string>; 
 	
 	class Request
